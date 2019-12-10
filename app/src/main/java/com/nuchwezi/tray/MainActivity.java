@@ -23,6 +23,8 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -121,6 +123,13 @@ public class MainActivity extends AppCompatActivity {
         if(tray.size() == 0)
             tray.add(new Cell(new Date(), String.format("To store something in your %s, merely click the + button.", getString(R.string.app_name))));
 
+        // sort tray so latest cells are at the top
+        Collections.sort(tray, new Comparator<Cell>() {
+            @Override
+            public int compare(Cell c1, Cell c2) {
+                return c2.getMoment().compareTo(c1.getMoment());
+            }
+        });
 
         trayAdapter = new TrayAdapter(this, tray);
 

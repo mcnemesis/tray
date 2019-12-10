@@ -4,4 +4,13 @@
     <string name="label_items">Egg</string>
     <string name="default_label_item">Egg</string>
     <string name="default_label_item_age">Age</string>
+    <string name="action_about">About</string>
+    <string name="powered_by">This technology is brought to you by Nuchwezi ICT Research Labs.
+        \n\nThe basic idea behind TRAY, is to create a mobile app that allows one to keep track of a stream of time-stamped strings.
+        \n\nSO HOW COULD IT HELP YOU?
+        \n\nIf you are walking down the street, and come to some restaurant you\'d wish to visit some day in the near future, you could merely
+        note its name down, and then some day later, merely consult the date-time sorted list of stored items in TRAY, for the name and whatever other notes about the place that you saved around that time.
+    \n\nCOPYRIGHT &amp; LEGAL
+    \n\n&#169; Nuchwezi Ltd.
+    </string>
 </resources>

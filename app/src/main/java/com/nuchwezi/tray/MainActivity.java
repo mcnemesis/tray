@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return false; // change to true, to display in-app menu
+        return true; // change to true, to display in-app menu
     }
 
     @Override
@@ -227,9 +227,26 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id){
+            /*case R.id.action_settings: {
+                return true;
+            }*/
+            case R.id.action_about: {
+                showAbout();
+                return true;
+            }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showAbout() {
+
+        Utility.showAlert(
+                this.getString(R.string.app_name),
+                String.format("Version %s (Build %s)\n\n%s",
+                        Utility.getVersionName(this),
+                        Utility.getVersionNumber(this),
+                        this.getString(R.string.powered_by)),
+                R.mipmap.ic_launcher, this);
     }
 }

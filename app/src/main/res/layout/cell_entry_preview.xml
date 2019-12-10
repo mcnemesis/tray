@@ -1,25 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/personaContainer"
+    android:layout_height="wrap_content"
+    android:id="@+id/uiContainer"
     android:padding="10dip"
     android:background="@color/colorCellBG1">
 
     <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:id="@+id/imgIcon"
         android:scaleType="fitCenter"
-        android:src="@mipmap/ic_launcher"/>
+        android:src="@mipmap/ic_launcher"
+        android:contentDescription="EGG" />
 
-    <TextView
-        android:layout_width="match_parent"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorAccent"
-        android:textSize="20dp"
-        android:text="Track"
-        android:id="@+id/txtTitle"
-        android:layout_marginLeft="15dip"/>
+        android:padding="5dip"
+        android:background="@color/colorCellBG1">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:textSize="20dp"
+            android:text="@string/default_label_item"
+            android:id="@+id/txtTitle"
+            android:layout_marginLeft="15dip"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="10dp"
+                android:textStyle="normal"
+                android:fontFamily="monospace"
+                android:text="@string/default_label_item_age"
+                android:id="@+id/txtAge"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="20dip"/>
+
+    </LinearLayout>
+
 
 </LinearLayout>

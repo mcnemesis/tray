@@ -29,6 +29,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -382,6 +385,11 @@ class Utility {
 
     public static String pluralizeThis(int count, String label) {
         return count == 1 ? String.format("%s %s", count, label) : String.format("%s %ss", count, label);
+    }
+
+    public static Duration computeAge(Date moment) {
+        ZonedDateTime now = ZonedDateTime.now();
+        return Duration.between(moment.toInstant(), now);
     }
 
     public class DICT_KEYS {

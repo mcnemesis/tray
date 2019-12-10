@@ -3,9 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/bm_copy"
+        android:title="Copy" />
+    <item
         android:id="@+id/bm_share"
-        android:title="Share This" />
+        android:title="Share" />
     <item
         android:id="@+id/bm_delete"
-        android:title="Delete This" />
+        android:title="Delete" />
 </menu>

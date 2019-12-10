@@ -1,5 +1,8 @@
 package com.nuchwezi.tray;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -167,6 +170,14 @@ public class MainActivity extends AppCompatActivity {
 
                 Intent shareIntent = Intent.createChooser(sendIntent, null);
                 startActivity(shareIntent);
+                return true;
+            }
+            case R.id.bm_copy: {
+                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                ClipData clip = ClipData.newPlainText(getString(R.string.default_label_item), tray.get(info.position).getItem());
+                clipboard.setPrimaryClip(clip);
+                Utility.showToast("Copied to Clipboard", this);
+                return true;
             }
             default:
                 return super.onContextItemSelected(item);
@@ -193,8 +204,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateStatus() {
         TextView txtStatus = findViewById(R.id.txtStatus);
-        txtStatus.setText(String.format("%s %s", Utility.humaneDate(new Date(), true),
-                Utility.pluralizeThis(getTrayStreamSize(), getString(R.string.label_items))));
+        txtStatus.setText(String.format("It's %s \nand you have %s in your %s.", Utility.humaneDate(new Date(), true),
+                Utility.pluralizeThis(getTrayStreamSize(), getString(R.string.label_items)), getString(R.string.app_name).toLowerCase()));
     }
 
     private int getTrayStreamSize() {

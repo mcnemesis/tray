@@ -2,4 +2,6 @@
     <string name="app_name">TRAY</string>
     <string name="action_settings">Settings</string>
     <string name="label_items">Egg</string>
+    <string name="default_label_item">Egg</string>
+    <string name="default_label_item_age">Age</string>
 </resources>

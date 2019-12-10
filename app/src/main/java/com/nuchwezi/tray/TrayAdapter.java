@@ -41,11 +41,13 @@ public class TrayAdapter extends ArrayAdapter<Cell> {
         View rowView=inflater.inflate(R.layout.cell_entry_preview, null,true);
 
         TextView txtTitle = rowView.findViewById(R.id.txtTitle);
+        TextView txtAge = rowView.findViewById(R.id.txtAge);
         ImageView imageView =  rowView.findViewById(R.id.imgIcon);
         rowView.setTag(items.get(position));
 
         Random random = new Random();
 
+        txtAge.setText(Utility.computeAge(items.get(position).getMoment()).toString());
         txtTitle.setText(items.get(position).getItem());
         imageView.setImageResource(icons[random.nextInt(icons.length)]);
 

@@ -20,11 +20,11 @@ public class TrayAdapter extends ArrayAdapter<Cell> {
     private final Activity context;
     private ArrayList<Cell> items;
     private final  int[] icons = {
-            R.drawable.star_1,
-            R.drawable.star_2,
-            R.drawable.star_3,
-            R.drawable.star_4,
-            R.drawable.star_5
+            R.drawable.symbol_1,
+            R.drawable.symbol_2,
+            R.drawable.symbol_3,
+            R.drawable.symbol_4,
+            R.drawable.symbol_5
     };
 
 

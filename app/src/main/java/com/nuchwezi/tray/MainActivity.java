@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
@@ -117,7 +119,12 @@ public class MainActivity extends AppCompatActivity {
             Type trayType = new TypeToken<ArrayList<Cell>>() {
             }.getType();
 
-            tray = gson.fromJson(jTray, trayType);
+            try {
+                tray = gson.fromJson(jTray, trayType);
+            }catch (JsonSyntaxException syntaxException){
+                Log.e(TAG,syntaxException.toString());
+                tray = Utility.obtainCellArrayListFromString(jTray); // let's try with the JSONObject mechanism
+            }
 
         }else {
             Utility.showToast("Sorry, but you haven't created any bookmarks yet.", this, Toast.LENGTH_LONG);

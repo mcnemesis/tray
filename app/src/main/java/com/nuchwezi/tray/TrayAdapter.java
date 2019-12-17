@@ -47,7 +47,7 @@ public class TrayAdapter extends ArrayAdapter<Cell> {
 
         Random random = new Random();
 
-        txtAge.setText(Utility.computeAge(items.get(position).getMoment()).toString());
+        txtAge.setText(Utility.computeAge(items.get(position).getMoment()));
         txtTitle.setText(items.get(position).getItem());
         imageView.setImageResource(icons[random.nextInt(icons.length)]);
 

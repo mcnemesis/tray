@@ -28,10 +28,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.time.ZonedDateTime;
-import java.time.temporal.Temporal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -387,9 +385,84 @@ class Utility {
         return count == 1 ? String.format("%s %s", count, label) : String.format("%s %ss", count, label);
     }
 
-    public static Duration computeAge(Date moment) {
-        ZonedDateTime now = ZonedDateTime.now();
-        return Duration.between(moment.toInstant(), now);
+    public static CharSequence computeAge(Date moment) {
+        Date now = new Date();
+        long diffMillis = now.getTime() - moment.getTime();
+        long diffSecs = (long) Math.round(diffMillis / 1000);
+        long diffMins = (long) Math.round(diffSecs / 60);
+        long diffHrs = (long) Math.round(diffMins / 60);
+        long diffDays = (long) Math.round(diffHrs/24);
+        long diffYears = (long) Math.round(diffDays/365);
+        StringBuilder ageSB = new StringBuilder();
+        if(diffYears > 0){
+            ageSB.append(String.format("%d Year%s", diffYears, diffYears == 1 ? "" : "s"));
+            diffDays = diffDays - (diffDays % 365);
+        }
+        if(diffDays > 0){
+            ageSB.append(String.format(" %d Day%s", diffDays, diffDays == 1 ? "" : "s"));
+            diffHrs = diffHrs - ((diffYears * 365 * 24)+ (diffDays * 24));
+        }
+        if(diffHrs > 0){
+            ageSB.append(String.format(" %d Hr%s", diffHrs, diffHrs == 1 ? "" : "s"));
+            diffMins = diffMins - ((diffYears * 365 * 24 * 60)+ (diffDays * 24 * 60) + (diffHrs * 60) );
+        }
+        if(diffMins > 0){
+            if(diffMins > 60){
+                diffMins = Math.round((diffMillis - ((diffYears * 365 * 24 * 60 * 60 * 1000)+ (diffDays * 24 * 60 * 60 * 1000) +  (diffHrs * 60 * 60 * 1000)))/(60 * 1000));
+            }
+            ageSB.append(String.format(" %d Min%s", diffMins, diffMins == 1 ? "" : "s"));
+            diffSecs = diffSecs - (((diffYears * 365 * 24 * 60)+ (diffDays * 24 * 60 * 60) + (diffHrs * 60 * 60) ) + (diffMins * 60));
+        }
+        if(diffSecs > 0){
+            long bestSecDiff = Math.round((diffMillis - ((diffYears * 365 * 24 * 60 * 60 * 1000)+ (diffDays * 24 * 60 * 60 * 1000) + (diffHrs * 60 * 60 * 1000)+ (diffMins * 60 * 1000)))/1000);
+            ageSB.append(String.format(" %d Sec%s", bestSecDiff, bestSecDiff == 1 ? "" : "s"));
+        }
+
+        return ageSB.toString().trim();
+    }
+
+    public static ArrayList<Cell> obtainCellArrayListFromString(String jTray) {
+        ArrayList<Cell> outTray = new ArrayList<>();
+        JSONArray parsedTray = null;
+        try {
+            parsedTray = new JSONArray(jTray);
+
+            for(int c =0; c < parsedTray.length(); c++){
+                JSONObject parsedCell = null;
+                try {
+                    parsedCell = new JSONObject(parsedTray.getString(c));
+
+                    Cell cell = null;
+
+                    try {
+                        Date moment = Utility.parseDate(parsedCell.getString("moment")); // NOTE: moment could be null!
+                        cell = new Cell(moment == null ? new Date() : moment, parsedCell.getString("item"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    if(cell != null)
+                        outTray.add(cell);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return outTray;
+    }
+
+    private static Date parseDate(String moment) {
+        DateFormat df = new SimpleDateFormat("MMM dd,yyyy HH:mm:ss");
+        try {
+            return df.parse(moment);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public class DICT_KEYS {

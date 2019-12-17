@@ -6,7 +6,7 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text|textMultiLine"
+        android:inputType="text|textMultiLine|textCapSentences"
         android:ems="10"
         android:id="@+id/eTxtPromptValue" />
 </LinearLayout>

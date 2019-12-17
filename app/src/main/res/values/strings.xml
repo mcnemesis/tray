@@ -13,4 +13,7 @@
     \n\nCOPYRIGHT &amp; LEGAL
     \n\n&#169; Nuchwezi Ltd.
     </string>
+    <string name="mimeType_tray_datafile">*/*</string>
+    <string name="label_traydata_from_file">Load TRAY Data from File...</string>
+    <string name="error_no_file_manager_found">No suitable File Manager was found.</string>
 </resources>

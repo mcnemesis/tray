@@ -465,6 +465,22 @@ class Utility {
         return null;
     }
 
+    public static HashSet<Cell> listToSet(ArrayList<Cell> cellArrayList) {
+        HashSet<Cell> tray = new HashSet<>();
+        for(Cell cell : cellArrayList)
+            tray.add(cell);
+
+        return tray;
+    }
+
+    public static ArrayList<Cell> setToCellList(HashSet<Cell> cellHashSet) {
+        ArrayList<Cell> tray = new ArrayList<>();
+        for(Cell cell : cellHashSet)
+            tray.add(cell);
+
+        return tray;
+    }
+
     public class DICT_KEYS {
         public static final String TRAY_STORE = "TRAY_STORE";
     }

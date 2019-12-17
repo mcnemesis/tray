@@ -1,9 +1,12 @@
 package com.nuchwezi.tray;
 
+import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -22,22 +25,29 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
+import com.ipaulpro.afilechooser.utils.FileUtils;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Writer;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "TRAY";
+    private static final String DATACACHE_BASEDIR = "TRAYDATA";
     private DBAdapter adapter;
     ArrayList<Cell> tray = new ArrayList<>();
     private TrayAdapter trayAdapter;
@@ -94,6 +104,11 @@ public class MainActivity extends AppCompatActivity {
         initTrayStream();
     }
 
+    private void updateTrayCache(ArrayList<Cell> latestTray) {
+       tray = latestTray;
+       updateTrayCache();
+    }
+
     private void updateTrayCache() {
 
         Gson gson = new Gson();
@@ -112,23 +127,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void initTrayStream() {
 
-        if(adapter.existsDictionaryKey(Utility.DICT_KEYS.TRAY_STORE)){
+        initTrayFromCache();
 
-            String jTray = adapter.fetchDictionaryEntry(Utility.DICT_KEYS.TRAY_STORE);
-            Gson gson = new Gson();
-            Type trayType = new TypeToken<ArrayList<Cell>>() {
-            }.getType();
-
-            try {
-                tray = gson.fromJson(jTray, trayType);
-            }catch (JsonSyntaxException syntaxException){
-                Log.e(TAG,syntaxException.toString());
-                tray = Utility.obtainCellArrayListFromString(jTray); // let's try with the JSONObject mechanism
-            }
-
-        }else {
-            Utility.showToast("Sorry, but you haven't created any bookmarks yet.", this, Toast.LENGTH_LONG);
-        }
+        if(tray == null)
+            tray = new ArrayList<>();
 
         if(tray.size() == 0)
             tray.add(new Cell(new Date(), String.format("To store something in your %s, merely click the + button.", getString(R.string.app_name))));
@@ -145,9 +147,39 @@ public class MainActivity extends AppCompatActivity {
 
         ListView trayListview =  findViewById(R.id.listItems);
 
+        trayListview.setAdapter(null);
         trayListview.setAdapter(trayAdapter);
 
         registerForContextMenu(trayListview);
+    }
+
+    private ArrayList<Cell> initTrayFromCache() {
+        String jTray = null;
+
+        if(adapter.existsDictionaryKey(Utility.DICT_KEYS.TRAY_STORE)){
+
+            jTray = adapter.fetchDictionaryEntry(Utility.DICT_KEYS.TRAY_STORE);
+
+        }else {
+            Utility.showToast("Sorry, but you haven't stored any eggs yet!", this, Toast.LENGTH_LONG);
+        }
+
+
+        Gson gson = new Gson();
+        Type trayType = new TypeToken<ArrayList<Cell>>() {
+        }.getType();
+
+        try {
+            tray = gson.fromJson(jTray, trayType);
+        }catch (JsonSyntaxException syntaxException){
+            Log.e(TAG,syntaxException.toString());
+            tray = Utility.obtainCellArrayListFromString(jTray); // let's try with the JSONObject mechanism
+        }
+
+        if(tray == null)
+            tray = new ArrayList<>();
+
+        return tray;
     }
 
     @Override
@@ -216,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private int getTrayStreamSize() {
-        return tray.size();
+        return tray == null ? 0 : tray.size();
     }
 
     @Override
@@ -238,6 +270,14 @@ public class MainActivity extends AppCompatActivity {
             /*case R.id.action_settings: {
                 return true;
             }*/
+            case R.id.action_export: {
+                exportRecordsToFile();
+                return true;
+            }
+            case R.id.action_import: {
+                importRecordsFromFile();
+                return true;
+            }
             case R.id.action_about: {
                 showAbout();
                 return true;
@@ -245,6 +285,190 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    private boolean getOrRequestWriteStoragePermission() {
+        if(hasPermissionWriteStorage()){
+            return true;
+        }else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 101);
+        }
+
+        return false;
+    }
+
+    private boolean hasPermissionWriteStorage() {
+        int result = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private boolean getOrRequestReadStoragePermission() {
+        if(hasPermissionReadStorage()){
+            return true;
+        }else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 101);
+        }
+
+        return false;
+    }
+
+    private boolean hasPermissionReadStorage() {
+        int result = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (result == PackageManager.PERMISSION_GRANTED) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    private void importRecordsFromFile() {
+
+        if(!getOrRequestReadStoragePermission()){
+            Utility.showToast("Please allow the app to read from your storage first.", this);
+            return;
+        }
+
+        String personaMimeType = getString(R.string.mimeType_tray_datafile);
+
+        // Create the ACTION_GET_CONTENT Intent
+        Intent getContentIntent = FileUtils.createGetContentIntent();
+
+        getContentIntent.setType(personaMimeType);
+        getContentIntent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        Intent chooserIntent = Intent.createChooser(getContentIntent, getString(R.string.label_traydata_from_file));
+
+
+        try {
+            startActivityForResult(chooserIntent, INTENT_MODE.CHOOSE_TRAYDATA_FILE_REQUESTCODE);
+
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), R.string.error_no_file_manager_found, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private void exportRecordsToFile() {
+        if(!getOrRequestWriteStoragePermission()){
+            Utility.showToast("Please allow the app to write to your storage first.", this);
+            return;
+        }
+
+
+        if(adapter.existsDictionaryKey(Utility.DICT_KEYS.TRAY_STORE)) {
+
+            String sCacheRecords = adapter.fetchDictionaryEntry(Utility.DICT_KEYS.TRAY_STORE);
+
+            String dataPath = null;
+
+            try {
+                dataPath = Utility.createSDCardDir(DATACACHE_BASEDIR, getFilesDir());
+            } catch (Exception e) {
+                Log.e(TAG, "DATA Path Error : " + e.getMessage());
+                Utility.showToast(e.getMessage(), getApplicationContext(),
+                        Toast.LENGTH_LONG);
+            }
+
+            if(dataPath != null) {
+
+                String SESSION_GUUID = java.util.UUID.randomUUID().toString();
+                String dataCacheFile = String.format("%s/%s-%s.%s", dataPath, Utility.humaneDate(new Date(), true), SESSION_GUUID,
+                        "json");
+
+                Writer output = null;
+                File file = new File(dataCacheFile);
+                try {
+                    output = new BufferedWriter(new FileWriter(file));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    output.write(sCacheRecords);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    output.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                Utility.showToast(String.format("%s Data Cached at : %s", getString(R.string.app_name), dataCacheFile), this);
+            }
+
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        switch (requestCode){
+            case INTENT_MODE.CHOOSE_TRAYDATA_FILE_REQUESTCODE: {
+                if(intent == null) {
+                    Utility.showToast("Failed to perform action", this);
+                    break;
+                }
+                //String selectedPath = intent.getDataString();
+
+                final Uri uri = intent.getData();
+
+                // Get the File path from the Uri
+                // Get the File path from the Uri
+                String selectedPath = FileUtils.getPath(this, uri);
+
+                loadImportedTRAYDataFromPath(selectedPath);
+                break;
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, intent);
+    }
+
+    private void loadImportedTRAYDataFromPath(String selectedPath) {
+        String sCacheRecords_Imported  = null;
+        try {
+
+            sCacheRecords_Imported = Utility.readFileToString(selectedPath);
+
+            Gson gson = new Gson();
+            Type trayType = new TypeToken<ArrayList<Cell>>() {
+            }.getType();
+
+            ArrayList<Cell> parsedTray;
+            try {
+                parsedTray = gson.fromJson(sCacheRecords_Imported, trayType);
+            }catch (JsonSyntaxException syntaxException){
+                Log.e(TAG,syntaxException.toString());
+                parsedTray = Utility.obtainCellArrayListFromString(sCacheRecords_Imported); // let's try with the JSONObject mechanism
+            }
+
+
+            HashSet<Cell> dbTray = Utility.listToSet(initTrayFromCache());
+            boolean imported = false;
+            if(parsedTray != null){
+                for(Cell cell : parsedTray){
+                    if(!dbTray.contains(cell)){
+                        dbTray.add(cell);
+                        imported = true;
+                    }
+                }
+            }
+
+            if(imported){
+                updateTrayCache(Utility.setToCellList(dbTray));
+                initTrayStream();
+            }
+            Utility.showToast("Refreshing Records...", this);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Utility.showAlert("Import File Error","Sorry, but loading the eggs from file has failed! Ensure the file can be read, and is legitimate!",
+                    R.drawable.warning,this);
+            return;
+        }
+    }
+
 
     private void showAbout() {
 
@@ -255,5 +479,11 @@ public class MainActivity extends AppCompatActivity {
                         Utility.getVersionNumber(this),
                         this.getString(R.string.powered_by)),
                 R.mipmap.ic_launcher, this);
+    }
+
+    private static class INTENT_MODE {
+
+        public static final int CHOOSE_TRAYDATA_FILE_REQUESTCODE = 3;
+
     }
 }

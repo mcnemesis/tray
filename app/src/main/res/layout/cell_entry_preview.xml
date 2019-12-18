@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:id="@+id/uiContainer"
     android:padding="10dip"
-    android:background="@color/colorCellBG1">
+    android:background="@color/colorTransparent">
 
     <ImageView
         android:layout_width="64dp"
@@ -18,7 +18,7 @@
         android:orientation="vertical" android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dip"
-        android:background="@color/colorCellBG1">
+        android:background="@drawable/cell_background">
 
 
         <TextView

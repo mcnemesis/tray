@@ -133,7 +133,7 @@ class Utility {
     }
 
     public static void showAlertPrompt(String title, final boolean allowEmpty, boolean addMask, int iconId,
-                                       final Context context, final ParametricCallback yesCallback, final Runnable cancelCallback) {
+                                       final Context context, final ParametricCallback yesCallback, final Runnable cancelCallback, String defaultText) {
         try {
             LayoutInflater layoutInflaterAndroid = LayoutInflater.from(context);
             final View dialogView = layoutInflaterAndroid.inflate(R.layout.alert_prompt, null);
@@ -170,6 +170,11 @@ class Utility {
                         cancelCallback.run();
                     }
                 });
+            }
+
+            if(defaultText != null){
+                EditText editText = dialogView.findViewById(R.id.eTxtPromptValue);
+                editText.setText(defaultText);
             }
 
             AlertDialog alert = builder.create();

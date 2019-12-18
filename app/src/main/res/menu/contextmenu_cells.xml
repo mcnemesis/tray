@@ -9,6 +9,12 @@
         android:id="@+id/bm_share"
         android:title="Share" />
     <item
+        android:id="@+id/bm_clone"
+        android:title="Clone" />
+    <item
+        android:id="@+id/bm_alter"
+        android:title="Alter" />
+    <item
         android:id="@+id/bm_delete"
         android:title="Delete" />
 </menu>

@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         // do nothing...
                     }
-                });
+                }, null);
     }
 
     private void createAndSaveNewCell(Date date, String item) {
@@ -215,7 +215,32 @@ public class MainActivity extends AppCompatActivity {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clip = ClipData.newPlainText(getString(R.string.default_label_item), tray.get(info.position).getItem());
                 clipboard.setPrimaryClip(clip);
-                Utility.showToast("Copied to Clipboard", this);
+                Utility.showToast(String.format("Copied %s to Clipboard", getString(R.string.default_label_item), getString(R.string.app_name)), this);
+                return true;
+            }
+            case R.id.bm_clone: {
+                createAndSaveNewCell(new Date(), tray.get(info.position).getItem());
+                Utility.showToast(String.format("Cloned %s into %s", getString(R.string.default_label_item), getString(R.string.app_name)), this);
+                return true;
+            }
+            case R.id.bm_alter: {
+                Utility.showAlertPrompt(
+                        String.format("to %s", getString(R.string.app_name)),
+                        false,
+                        false,
+                        R.drawable.item_add,
+                        this, new ParametricCallback() {
+                            @Override
+                            public void call(String item) {
+                                createAndSaveNewCell(new Date(), item);
+                            }
+                        }, new Runnable() {
+                            @Override
+                            public void run() {
+                                // do nothing...
+                            }
+                        }, tray.get(info.position).getItem());
+                Utility.showToast(String.format("Cloned %s into %s", getString(R.string.default_label_item), getString(R.string.app_name)), this);
                 return true;
             }
             default:

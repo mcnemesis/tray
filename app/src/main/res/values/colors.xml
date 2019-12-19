@@ -3,7 +3,9 @@
     <color name="colorPrimary">#424254</color>
     <color name="colorPrimaryDark">#202035</color>
     <color name="colorAccent">#351330</color>
-    <color name="colorCellBG1">#FEFBE0</color>
+    <!-- color name="colorCellBG1">#FEFBE0</color -->
+    <color name="colorCellBG1">#C0CA33</color>
+    <color name="colorCellBG2">#ECF5F5</color>
     <color name="colorGradientStart">#96DED1</color>
     <color name="colorGradientCenter">#F67831</color>
     <color name="colorGradientEnd">#00CED1</color>

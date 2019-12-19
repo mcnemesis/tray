@@ -16,12 +16,16 @@
 
         <TextView
             android:id="@+id/txtStatus"
+            android:textStyle="bold"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
             />
 
         <ListView
+            android:divider="@drawable/cell_divider"
+            android:dividerHeight="5dp"
+            android:padding="10dp"
             android:nestedScrollingEnabled="true"
             android:id="@+id/listItems"
             android:layout_width="match_parent"

@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 public class TrayAdapter extends ArrayAdapter<Cell> {
@@ -47,7 +48,8 @@ public class TrayAdapter extends ArrayAdapter<Cell> {
 
         Random random = new Random();
 
-        txtAge.setText(Utility.computeAge(items.get(position).getMoment()));
+        Date moment = items.get(position).getMoment();
+        txtAge.setText(String.format("%s ago.\nsince %s", Utility.computeAge(moment),Utility.humaneDate(moment,true)));
         txtTitle.setText(items.get(position).getItem());
         imageView.setImageResource(icons[random.nextInt(icons.length)]);
 

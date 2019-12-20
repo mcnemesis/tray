@@ -17,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,8 +83,44 @@ public class MainActivity extends AppCompatActivity {
         adapter = new DBAdapter(this);
         adapter.open();
 
+        // Get intent, action and MIME type
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if ("text/plain".equals(type)) {
+                handleIncomingText(intent); // Handle text being sent
+            }
+        }
+
         initTrayStream();
         initStatusUpdate();
+    }
+
+    private void handleIncomingText(Intent intent) {
+        String sharedText = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if (sharedText != null) {
+            Utility.showAlertPrompt(
+                    String.format("to %s", getString(R.string.app_name)),
+                    false,
+                    false,
+                    R.drawable.item_add,
+                    this, new ParametricCallback() {
+                        @Override
+                        public void call(String item) {
+                            createAndSaveNewCell(new Date(), item);
+                            Utility.showToast(String.format("Imported egg into %s", getString(R.string.app_name), getString(R.string.app_name)), MainActivity.this);
+                        }
+                    }, new Runnable() {
+                        @Override
+                        public void run() {
+                            // do nothing...
+                            Utility.showToast("Import ignored.", MainActivity.this);
+                        }
+                    }, sharedText);
+
+        }
     }
 
     private void triggerAddCell() {

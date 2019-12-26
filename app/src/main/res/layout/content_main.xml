@@ -22,6 +22,16 @@
             android:layout_margin="@dimen/text_margin"
             />
 
+        <EditText
+            android:id="@+id/eTxtFilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:background="@drawable/cell_background_inner"
+            android:hint="Search or Filter..."
+            android:inputType="text"
+            android:padding="6dp" />
+
         <ListView
             android:divider="@drawable/cell_divider"
             android:dividerHeight="5dp"

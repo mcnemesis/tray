@@ -10,6 +10,8 @@ import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -53,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private DBAdapter adapter;
     ArrayList<Cell> tray = new ArrayList<>();
     private TrayAdapter trayAdapter;
+    private int shownEggCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +99,60 @@ public class MainActivity extends AppCompatActivity {
 
         initTrayStream();
         initStatusUpdate();
+        initSearchFilterMechanism();
+    }
+
+    private void initSearchFilterMechanism() {
+        final EditText eTxtSearchFilter = findViewById(R.id.eTxtFilter);
+        eTxtSearchFilter.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+
+                String searchFilter = eTxtSearchFilter.getText().toString();
+                applySearchFilter(searchFilter);
+
+            }
+        });
+    }
+
+    private void applySearchFilter(String searchFilter) {
+
+        if(tray == null)
+            tray = new ArrayList<>();
+
+        if(tray.size() == 0)
+            tray.add(new Cell(new Date(), String.format("To store something in your %s, merely click the + button.", getString(R.string.app_name))));
+
+
+        if(searchFilter == null){
+            renderTray(tray);
+            return;
+        }
+
+        if(searchFilter.trim().length() == 0)
+        {
+            renderTray(tray);
+            return;
+        }
+
+        ArrayList<Cell> filteredTray = new ArrayList<>();
+        for(Cell egg : tray){
+            String item = egg.getItem();
+            if(item.matches(searchFilter.trim()) || item.contains(searchFilter))
+                filteredTray.add(egg);
+        }
+
+        renderTray(filteredTray);
     }
 
     private void handleIncomingText(Intent intent) {
@@ -180,15 +237,19 @@ public class MainActivity extends AppCompatActivity {
         if(tray.size() == 0)
             tray.add(new Cell(new Date(), String.format("To store something in your %s, merely click the + button.", getString(R.string.app_name))));
 
+        renderTray(tray);
+    }
+
+    private void renderTray(ArrayList<Cell> useTray) {
         // sort tray so latest cells are at the top
-        Collections.sort(tray, new Comparator<Cell>() {
+        Collections.sort(useTray, new Comparator<Cell>() {
             @Override
             public int compare(Cell c1, Cell c2) {
                 return c2.getMoment().compareTo(c1.getMoment());
             }
         });
 
-        trayAdapter = new TrayAdapter(this, tray);
+        trayAdapter = new TrayAdapter(this, useTray);
 
         ListView trayListview =  findViewById(R.id.listItems);
 
@@ -196,6 +257,8 @@ public class MainActivity extends AppCompatActivity {
         trayListview.setAdapter(trayAdapter);
 
         registerForContextMenu(trayListview);
+
+        shownEggCount = useTray.size();
     }
 
     private ArrayList<Cell> initTrayFromCache() {
@@ -313,8 +376,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateStatus() {
         TextView txtStatus = findViewById(R.id.txtStatus);
-        txtStatus.setText(String.format("It's %s \nand you have %s in your %s.", Utility.humaneDate(new Date(), true),
-                Utility.pluralizeThis(getTrayStreamSize(), getString(R.string.label_items)), getString(R.string.app_name).toLowerCase()));
+        txtStatus.setText(String.format("It's %s \nand you have %s%s in your %s.", Utility.humaneDate(new Date(), true),
+                shownEggCount == getTrayStreamSize()? "": String.format("%s/",shownEggCount),Utility.pluralizeThis(getTrayStreamSize(), getString(R.string.label_items)), getString(R.string.app_name).toLowerCase()));
     }
 
     private int getTrayStreamSize() {

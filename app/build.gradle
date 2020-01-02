@@ -6,8 +6,8 @@ android {
         applicationId "com.nuchwezi.tray"
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 9
-        versionName "1.8"
+        versionCode 10
+        versionName "1.9"
     }
     buildTypes {
         release {
@@ -23,4 +23,11 @@ dependencies {
     implementation 'com.google.android.material:material:1.2.0-alpha02'
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation project(path: ':aFileChooser')
+
+    final def markwon_version = '4.2.0'
+
+    implementation    "io.noties.markwon:core:$markwon_version"
+    implementation    "io.noties.markwon:ext-strikethrough:$markwon_version"
+    implementation    "io.noties.markwon:html:$markwon_version"
+    implementation    "io.noties.markwon:image-picasso:$markwon_version"
 }

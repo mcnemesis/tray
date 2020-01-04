@@ -148,8 +148,11 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Cell> filteredTray = new ArrayList<>();
         for(Cell egg : tray){
             String item = egg.getItem();
-            if(item.matches(searchFilter.trim()) || item.contains(searchFilter))
-                filteredTray.add(egg);
+            try {
+                if (item.matches(searchFilter.trim()) || item.contains(searchFilter))
+                    filteredTray.add(egg);
+            }catch (Exception e){
+            }
         }
 
         renderTray(filteredTray);

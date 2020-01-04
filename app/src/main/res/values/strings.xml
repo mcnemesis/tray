@@ -8,8 +8,8 @@
     <string name="powered_by">This technology is brought to you by Nuchwezi ICT Research Labs.
         \n\nThe basic idea behind TRAY, is to create a mobile app that allows one to keep track of a stream of time-stamped strings.
         \n\nSO HOW COULD IT HELP YOU?
-        \n\nIf you are walking down the street, and come to some restaurant you\'d wish to visit some day in the near future, you could merely
-        note its name down, and then some day later, merely consult the date-time sorted list of stored items in TRAY, for the name and whatever other notes about the place that you saved around that time.
+        \n\nSimple - note taking, TODO lists, collecting research material (using the \"share to TRAY\" for text from other apps), and many other things.
+        \n\nNote that there\'s support for Markdown and basic HTML, so you can created well formatted notes if you know some of that stuff too.
     \n\nCOPYRIGHT &amp; LEGAL
     \n\n&#169; Nuchwezi Ltd.
     </string>

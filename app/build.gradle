@@ -29,5 +29,4 @@ dependencies {
     implementation    "io.noties.markwon:core:$markwon_version"
     implementation    "io.noties.markwon:ext-strikethrough:$markwon_version"
     implementation    "io.noties.markwon:html:$markwon_version"
-    implementation    "io.noties.markwon:image-picasso:$markwon_version"
 }

@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.Random;
 
 import io.noties.markwon.Markwon;
+import io.noties.markwon.html.HtmlPlugin;
 
 public class TrayAdapter extends ArrayAdapter<Cell> {
 
@@ -39,7 +40,9 @@ public class TrayAdapter extends ArrayAdapter<Cell> {
         this.context=context;
         items = cells;
 
-        markwon = Markwon.create(context);
+        markwon = Markwon.builder(context)
+                .usePlugin(HtmlPlugin.create())
+                .build();
     }
 
     public View getView(int position, View view, ViewGroup parent) {

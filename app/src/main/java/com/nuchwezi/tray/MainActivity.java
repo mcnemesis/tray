@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
                             // do nothing...
                             Utility.showToast("Import ignored.", MainActivity.this);
                         }
-                    }, sharedText);
+                    }, String.format("%s\n\n_#imported_",sharedText));
 
         }
     }

@@ -41,6 +41,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -54,8 +55,12 @@ public class MainActivity extends AppCompatActivity {
     private static final String DATACACHE_BASEDIR = "TRAYDATA";
     private DBAdapter adapter;
     ArrayList<Cell> tray = new ArrayList<>();
+    ArrayList<Cell> filteredTray = new ArrayList<>();
+    HashMap<Integer, Integer> filteredToMainTrayIndexMap = new HashMap<>();
     private TrayAdapter trayAdapter;
     private int shownEggCount = 0;
+    private boolean filtersOn; // when in a search, we reference the filtered tray for example
+    EditText eTxtSearchFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initSearchFilterMechanism() {
-        final EditText eTxtSearchFilter = findViewById(R.id.eTxtFilter);
+        eTxtSearchFilter = findViewById(R.id.eTxtFilter);
         eTxtSearchFilter.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -118,11 +123,15 @@ public class MainActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start,
                                       int before, int count) {
 
-                String searchFilter = eTxtSearchFilter.getText().toString();
-                applySearchFilter(searchFilter);
+                renderSearchResults();
 
             }
         });
+    }
+
+    private void renderSearchResults() {
+        String searchFilter = eTxtSearchFilter.getText().toString();
+        applySearchFilter(searchFilter);
     }
 
     private void applySearchFilter(String searchFilter) {
@@ -135,26 +144,35 @@ public class MainActivity extends AppCompatActivity {
 
 
         if(searchFilter == null){
+            filtersOn = false;
             renderTray(tray);
             return;
         }
 
         if(searchFilter.trim().length() == 0)
         {
+            filtersOn = false;
             renderTray(tray);
             return;
         }
 
-        ArrayList<Cell> filteredTray = new ArrayList<>();
+        filteredTray = new ArrayList<>();
+        filteredToMainTrayIndexMap = new HashMap<>();
+
+        int trayIndex = 0;
         for(Cell egg : tray){
             String item = egg.getItem();
             try {
-                if (item.matches(searchFilter.trim()) || item.contains(searchFilter))
+                if (item.matches(searchFilter.trim()) || item.contains(searchFilter)) {
                     filteredTray.add(egg);
+                    filteredToMainTrayIndexMap.put(filteredTray.size() - 1, trayIndex);
+                }
             }catch (Exception e){
             }
+            trayIndex += 1;
         }
 
+        filtersOn = true;
         renderTray(filteredTray);
     }
 
@@ -234,23 +252,23 @@ public class MainActivity extends AppCompatActivity {
 
         initTrayFromCache();
 
+
         if(tray == null)
             tray = new ArrayList<>();
 
         if(tray.size() == 0)
             tray.add(new Cell(new Date(), String.format("To store something in your %s, merely click the + button.", getString(R.string.app_name))));
 
+        if(filtersOn)
+        {
+            renderSearchResults();
+            return;
+        }
+
         renderTray(tray);
     }
 
     private void renderTray(ArrayList<Cell> useTray) {
-        // sort tray so latest cells are at the top
-        Collections.sort(useTray, new Comparator<Cell>() {
-            @Override
-            public int compare(Cell c1, Cell c2) {
-                return c2.getMoment().compareTo(c1.getMoment());
-            }
-        });
 
         trayAdapter = new TrayAdapter(this, useTray);
 
@@ -290,6 +308,14 @@ public class MainActivity extends AppCompatActivity {
         if(tray == null)
             tray = new ArrayList<>();
 
+        // sort tray so latest cells are at the top
+        Collections.sort(tray, new Comparator<Cell>() {
+            @Override
+            public int compare(Cell c1, Cell c2) {
+                return c2.getMoment().compareTo(c1.getMoment());
+            }
+        });
+
         return tray;
     }
 
@@ -307,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch(item.getItemId()) {
             case R.id.bm_delete: {
-                tray.remove(info.position);
+                tray.remove(filtersOn ? filteredToMainTrayIndexMap.get(info.position) : info.position);
                 updateTrayCache();
                 initTrayStream();
                 return true;
@@ -315,7 +341,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.bm_share: {
                 Intent sendIntent = new Intent();
                 sendIntent.setAction(Intent.ACTION_SEND);
-                sendIntent.putExtra(Intent.EXTRA_TEXT, tray.get(info.position).getItem());
+                sendIntent.putExtra(Intent.EXTRA_TEXT, tray.get(filtersOn ? filteredToMainTrayIndexMap.get(info.position) : info.position).getItem());
                 sendIntent.setType("text/plain");
 
                 Intent shareIntent = Intent.createChooser(sendIntent, null);
@@ -324,13 +350,13 @@ public class MainActivity extends AppCompatActivity {
             }
             case R.id.bm_copy: {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(getString(R.string.default_label_item), tray.get(info.position).getItem());
+                ClipData clip = ClipData.newPlainText(getString(R.string.default_label_item), tray.get(filtersOn ? filteredToMainTrayIndexMap.get(info.position) : info.position).getItem());
                 clipboard.setPrimaryClip(clip);
                 Utility.showToast(String.format("Copied %s to Clipboard", getString(R.string.default_label_item), getString(R.string.app_name)), this);
                 return true;
             }
             case R.id.bm_clone: {
-                createAndSaveNewCell(new Date(), tray.get(info.position).getItem());
+                createAndSaveNewCell(new Date(), tray.get(filtersOn ? filteredToMainTrayIndexMap.get(info.position) : info.position).getItem());
                 Utility.showToast(String.format("Cloned %s into %s", getString(R.string.default_label_item), getString(R.string.app_name)), this);
                 return true;
             }
@@ -350,7 +376,7 @@ public class MainActivity extends AppCompatActivity {
                             public void run() {
                                 // do nothing...
                             }
-                        }, tray.get(info.position).getItem());
+                        }, tray.get(filtersOn ? filteredToMainTrayIndexMap.get(info.position) : info.position).getItem());
                 Utility.showToast(String.format("Cloned %s into %s", getString(R.string.default_label_item), getString(R.string.app_name)), this);
                 return true;
             }

@@ -160,10 +160,11 @@ public class MainActivity extends AppCompatActivity {
         filteredToMainTrayIndexMap = new HashMap<>();
 
         int trayIndex = 0;
+        String activeSearchFilter = searchFilter.trim();
         for(Cell egg : tray){
-            String item = egg.getItem();
+            String item = egg.getItem().toLowerCase();
             try {
-                if (item.matches(searchFilter.trim()) || item.contains(searchFilter)) {
+                if (item.matches(activeSearchFilter) || item.contains(activeSearchFilter)) {
                     filteredTray.add(egg);
                     filteredToMainTrayIndexMap.put(filteredTray.size() - 1, trayIndex);
                 }

@@ -28,7 +28,11 @@ public class TrayAdapter extends ArrayAdapter<Cell> {
             R.drawable.symbol_2,
             R.drawable.symbol_3,
             R.drawable.symbol_4,
-            R.drawable.symbol_5
+            R.drawable.symbol_5,
+            R.drawable.symbol_6,
+            R.drawable.symbol_7,
+            R.drawable.symbol_8,
+            R.drawable.symbol_9
     };
 
     // obtain an instance of Markwon

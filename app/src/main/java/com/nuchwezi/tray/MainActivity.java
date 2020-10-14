@@ -162,9 +162,13 @@ public class MainActivity extends AppCompatActivity {
         int trayIndex = 0;
         String activeSearchFilter = searchFilter.trim();
         for(Cell egg : tray){
-            String item = egg.getItem().toLowerCase();
+            String item = egg.getItem();
             try {
                 if (item.matches(activeSearchFilter) || item.contains(activeSearchFilter)) {
+                    filteredTray.add(egg);
+                    filteredToMainTrayIndexMap.put(filteredTray.size() - 1, trayIndex);
+                }else
+                if (item.toLowerCase().matches(activeSearchFilter) || item.toLowerCase().contains(activeSearchFilter)) {
                     filteredTray.add(egg);
                     filteredToMainTrayIndexMap.put(filteredTray.size() - 1, trayIndex);
                 }
@@ -406,7 +410,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateStatus() {
         TextView txtStatus = findViewById(R.id.txtStatus);
-        txtStatus.setText(String.format("It's %s \nand you have %s%s in your %s.", Utility.humaneDate(new Date(), true),
+        txtStatus.setText(String.format(this.getString(R.string.status_pattern), Utility.humaneDate(new Date(), true),
                 shownEggCount == getTrayStreamSize()? "": String.format("%s/",shownEggCount),Utility.pluralizeThis(getTrayStreamSize(), getString(R.string.label_items)), getString(R.string.app_name).toLowerCase()));
     }
 

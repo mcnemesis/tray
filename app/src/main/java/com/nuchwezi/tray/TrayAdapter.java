@@ -69,7 +69,7 @@ public class TrayAdapter extends ArrayAdapter<Cell> {
         String text = items.get(position).getItem();
         // found that typical user will use single \n in text, but markdown somewhat doesn't respect that,
         // so we alter text by default to turn single \n to \n\n
-        text = text.replaceAll("\n", "\n\n");
+       // text = text.replaceAll("\n", "\n\n");
         markwon.setMarkdown(txtTitle,text);
 
         imageView.setImageResource(icons[random.nextInt(icons.length)]);

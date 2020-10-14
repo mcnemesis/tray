@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">TRAY</string>
     <string name="action_settings">Settings</string>
-    <string name="label_items">Egg</string>
-    <string name="default_label_item">Egg</string>
+    <string name="label_items">meta egg</string>
+    <string name="default_label_item">meta egg</string>
     <string name="default_label_item_age">Age</string>
     <string name="action_about">About | Help</string>
     <string name="powered_by">This technology is brought to you by Nuchwezi ICT Research Labs.
-        \n\nThe basic idea behind TRAY, is to create a mobile app that allows one to keep track of a stream of time-stamped strings.
+        \n\nThe basic idea behind TRAY, is to create a tool that allows one to generate, store, share and analyze a stream of time-stamped strings. In the world of TRAY, we call them "meta eggs", and one could think of a meta egg as a self-contained, particular string with a high information density.
         \n\nSO HOW COULD IT HELP YOU?
-        \n\nSimple - note taking, TODO lists, collecting research material (using the \"share to TRAY\" for text from other apps), and many other things.
+        \n\nNote taking, TODO lists, bookmarking important things, collecting research material (using the \"share to TRAY\" for text from other apps), and many other things.
         \n\nSomeone has called TRAY their "living diary", private and secure indeed.
         \n\nNote that there\'s support for Markdown and basic HTML, so you can create well formatted notes if you know some of that stuff too.
     \n\nCOPYRIGHT &amp; LEGAL
@@ -17,4 +17,5 @@
     <string name="mimeType_tray_datafile">*/*</string>
     <string name="label_traydata_from_file">Load TRAY Data from File...</string>
     <string name="error_no_file_manager_found">No suitable File Manager was found.</string>
+    <string name="status_pattern">It is %s \nand you have %s%s in your %s.</string>
 </resources>

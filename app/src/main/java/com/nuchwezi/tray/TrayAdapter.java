@@ -21,6 +21,22 @@ import io.noties.markwon.html.HtmlPlugin;
 
 public class TrayAdapter extends ArrayAdapter<Cell> {
 
+    protected enum EggRenderStyle {
+        NORMAL_SMALL,
+        NORMAL_LARGE,
+        NORMAL_DEFAULT
+    }
+
+    private EggRenderStyle DEFAULT_EGG_RENDER_STYLE = EggRenderStyle.NORMAL_DEFAULT;
+    protected EggRenderStyle activeEggRenderStyle = DEFAULT_EGG_RENDER_STYLE; // clients can modify..
+    public EggRenderStyle getActiveEggRenderStyle(){
+        return activeEggRenderStyle;
+    }
+
+    public void setActiveEggRenderStyle(EggRenderStyle activeEggRenderStyle) {
+        this.activeEggRenderStyle = activeEggRenderStyle;
+    }
+
     private final Activity context;
     private ArrayList<Cell> items;
     private final  int[] icons = {
@@ -38,7 +54,7 @@ public class TrayAdapter extends ArrayAdapter<Cell> {
     // obtain an instance of Markwon
     final Markwon markwon;
 
-    public TrayAdapter(Activity context, ArrayList<Cell>  cells) {
+    public TrayAdapter(Activity context, ArrayList<Cell>  cells, EggRenderStyle appliedEggRenderStyle) {
         super(context, R.layout.cell_entry_preview, cells);
 
         this.context=context;
@@ -47,12 +63,32 @@ public class TrayAdapter extends ArrayAdapter<Cell> {
         markwon = Markwon.builder(context)
                 .usePlugin(HtmlPlugin.create())
                 .build();
+
+        activeEggRenderStyle = appliedEggRenderStyle;
     }
 
     public View getView(int position, View view, ViewGroup parent) {
 
         LayoutInflater inflater=context.getLayoutInflater();
-        View rowView=inflater.inflate(R.layout.cell_entry_preview, null,true);
+
+        int appliedEggLayout;
+        switch (activeEggRenderStyle){
+            case NORMAL_LARGE:{
+                appliedEggLayout = R.layout.cell_entry_preview;
+                break;
+            }
+            case NORMAL_SMALL:{
+                appliedEggLayout = R.layout.cell_entry_preview_sm;
+                break;
+            }
+            default:
+            case NORMAL_DEFAULT:{
+                appliedEggLayout = R.layout.cell_entry_preview;
+            }
+
+        }
+
+        View rowView=inflater.inflate(appliedEggLayout, null,true);
 
         TextView txtTitle = rowView.findViewById(R.id.txtTitle);
         TextView txtAge = rowView.findViewById(R.id.txtAge);

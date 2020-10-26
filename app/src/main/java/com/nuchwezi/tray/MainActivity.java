@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private int shownEggCount = 0;
     private boolean filtersOn; // when in a search, we reference the filtered tray for example
     EditText eTxtSearchFilter;
+    private ArrayList<Cell> activeTray = tray; // change this to determine meta-egg subset to render
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,14 +146,16 @@ public class MainActivity extends AppCompatActivity {
 
         if(searchFilter == null){
             filtersOn = false;
-            renderTray(tray);
+            activeTray = tray;
+            renderTray();
             return;
         }
 
         if(searchFilter.trim().length() == 0)
         {
             filtersOn = false;
-            renderTray(tray);
+            activeTray = tray;
+            renderTray();
             return;
         }
 
@@ -178,7 +181,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         filtersOn = true;
-        renderTray(filteredTray);
+        activeTray = filteredTray;
+        renderTray();
     }
 
     private void handleIncomingText(Intent intent) {
@@ -266,16 +270,18 @@ public class MainActivity extends AppCompatActivity {
 
         if(filtersOn)
         {
+            activeTray = filteredTray;
             renderSearchResults();
             return;
         }
 
-        renderTray(tray);
+        activeTray = tray;
+        renderTray();
     }
 
-    private void renderTray(ArrayList<Cell> useTray) {
+    private void renderTray() {
 
-        trayAdapter = new TrayAdapter(this, useTray);
+        trayAdapter = new TrayAdapter(this, activeTray, trayAdapter != null? trayAdapter.getActiveEggRenderStyle() : TrayAdapter.EggRenderStyle.NORMAL_DEFAULT);
 
         ListView trayListview =  findViewById(R.id.listItems);
 
@@ -284,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
 
         registerForContextMenu(trayListview);
 
-        shownEggCount = useTray.size();
+        shownEggCount = activeTray.size();
     }
 
     private ArrayList<Cell> initTrayFromCache() {
@@ -646,6 +652,16 @@ public class MainActivity extends AppCompatActivity {
                         Utility.getVersionNumber(this),
                         this.getString(R.string.powered_by)),
                 R.mipmap.ic_launcher, this);
+    }
+
+    public void setEggRenderStyleTiny(View view) {
+        trayAdapter.setActiveEggRenderStyle(TrayAdapter.EggRenderStyle.NORMAL_SMALL);
+        renderTray();
+    }
+
+    public void setEggRenderStyleNormal(View view) {
+        trayAdapter.setActiveEggRenderStyle(TrayAdapter.EggRenderStyle.NORMAL_DEFAULT);
+        renderTray();
     }
 
     private static class INTENT_MODE {

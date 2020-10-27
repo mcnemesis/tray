@@ -416,8 +416,27 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateStatus() {
         TextView txtStatus = findViewById(R.id.txtStatus);
-        txtStatus.setText(String.format(this.getString(R.string.status_pattern), Utility.humaneDate(new Date(), true),
-                shownEggCount == getTrayStreamSize()? "": String.format("%s/",shownEggCount),Utility.pluralizeThis(getTrayStreamSize(), getString(R.string.label_items)), getString(R.string.app_name).toLowerCase()));
+        int traySize = getTrayStreamSize();
+        if(shownEggCount == traySize) {
+            txtStatus.setText(String.format(this.getString(R.string.status_pattern),
+                    Utility.humaneDate(new Date(), true),
+                    Utility.pluralizeThis(traySize,
+                            getString(R.string.label_items)),
+                    getString(R.string.app_name).toLowerCase()));
+        }else{
+            double filterRatio = shownEggCount * 1.0 / traySize;
+            String filterKPIs = String.format("%s. Active filter has a %s%% Significance (%s)",
+                    getString(R.string.app_name).toLowerCase(),
+                    Math.round(Utility.computePercentage(1 - filterRatio)),
+                    String.format("%s/%s", shownEggCount, traySize)
+                    );
+            txtStatus.setText(String.format(this.getString(R.string.status_pattern),
+                    Utility.humaneDate(new Date(), true),
+                    Utility.pluralizeThis(traySize,
+                            getString(R.string.label_items)),
+                    filterKPIs
+                    ));
+        }
     }
 
     private int getTrayStreamSize() {

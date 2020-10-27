@@ -486,6 +486,10 @@ class Utility {
         return tray;
     }
 
+    public static double computePercentage(double ratio) {
+        return 100 * ratio;
+    }
+
     public class DICT_KEYS {
         public static final String TRAY_STORE = "TRAY_STORE";
     }

@@ -685,6 +685,11 @@ public class MainActivity extends AppCompatActivity {
         renderTray();
     }
 
+    public void setEggRenderStyleSuperTiny(View view) {
+        trayAdapter.setActiveEggRenderStyle(TrayAdapter.EggRenderStyle.NORMAL_MICRO);
+        renderTray();
+    }
+
     private static class INTENT_MODE {
 
         public static final int CHOOSE_TRAYDATA_FILE_REQUESTCODE = 3;

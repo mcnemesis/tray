@@ -22,6 +22,7 @@ import io.noties.markwon.html.HtmlPlugin;
 public class TrayAdapter extends ArrayAdapter<Cell> {
 
     protected enum EggRenderStyle {
+        NORMAL_MICRO,
         NORMAL_SMALL,
         NORMAL_LARGE,
         NORMAL_DEFAULT
@@ -79,6 +80,10 @@ public class TrayAdapter extends ArrayAdapter<Cell> {
             }
             case NORMAL_SMALL:{
                 appliedEggLayout = R.layout.cell_entry_preview_sm;
+                break;
+            }
+            case NORMAL_MICRO:{
+                appliedEggLayout = R.layout.cell_entry_preview_mi;
                 break;
             }
             default:

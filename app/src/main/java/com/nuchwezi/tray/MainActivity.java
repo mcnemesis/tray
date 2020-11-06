@@ -43,6 +43,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.regex.Pattern;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -166,18 +167,23 @@ public class MainActivity extends AppCompatActivity {
 
         int trayIndex = 0;
         String activeSearchFilter = searchFilter.trim();
+        Pattern activeSearchRegex = Pattern.compile(activeSearchFilter);
         for(Cell egg : tray){
             String item = egg.getItem();
-            try {
-                if (item.matches(activeSearchFilter) || item.contains(activeSearchFilter)) {
-                    filteredTray.add(egg);
-                    filteredToMainTrayIndexMap.put(filteredTray.size() - 1, trayIndex);
-                }else
-                if (item.toLowerCase().matches(activeSearchFilter) || item.toLowerCase().contains(activeSearchFilter)) {
-                    filteredTray.add(egg);
-                    filteredToMainTrayIndexMap.put(filteredTray.size() - 1, trayIndex);
+            if(activeSearchRegex.matcher(item).find()){
+                filteredTray.add(egg);
+                filteredToMainTrayIndexMap.put(filteredTray.size() - 1, trayIndex);
+            }else {
+                try {
+                    if (item.matches(activeSearchFilter) || item.contains(activeSearchFilter)) {
+                        filteredTray.add(egg);
+                        filteredToMainTrayIndexMap.put(filteredTray.size() - 1, trayIndex);
+                    } else if (item.toLowerCase().matches(activeSearchFilter) || item.toLowerCase().contains(activeSearchFilter)) {
+                        filteredTray.add(egg);
+                        filteredToMainTrayIndexMap.put(filteredTray.size() - 1, trayIndex);
+                    }
+                } catch (Exception e) {
                 }
-            }catch (Exception e){
             }
             trayIndex += 1;
         }

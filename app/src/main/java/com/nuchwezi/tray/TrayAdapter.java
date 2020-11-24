@@ -12,8 +12,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.Random;
 
 import io.noties.markwon.Markwon;
@@ -55,7 +59,7 @@ public class TrayAdapter extends ArrayAdapter<Cell> {
     // obtain an instance of Markwon
     final Markwon markwon;
 
-    public TrayAdapter(Activity context, ArrayList<Cell>  cells, EggRenderStyle appliedEggRenderStyle) {
+    public TrayAdapter(Activity context, ArrayList<Cell> cells, EggRenderStyle appliedEggRenderStyle) {
         super(context, R.layout.cell_entry_preview, cells);
 
         this.context=context;
@@ -97,6 +101,7 @@ public class TrayAdapter extends ArrayAdapter<Cell> {
 
         TextView txtTitle = rowView.findViewById(R.id.txtTitle);
         TextView txtAge = rowView.findViewById(R.id.txtAge);
+        TextView txtMetrics = rowView.findViewById(R.id.txtMetrics);
         ImageView imageView =  rowView.findViewById(R.id.imgIcon);
         rowView.setTag(items.get(position));
 
@@ -112,6 +117,16 @@ public class TrayAdapter extends ArrayAdapter<Cell> {
         // so we alter text by default to turn single \n to \n\n
        // text = text.replaceAll("\n", "\n\n");
         markwon.setMarkdown(txtTitle,text);
+
+
+        JSONObject metrics = Utility.computeMetrics(text);
+        try {
+            if(metrics != null) {
+                txtMetrics.setText(String.format("L:%s | C: %s | U: %s", metrics.getInt("L"), metrics.getInt("C"), metrics.getInt("U")));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         imageView.setImageResource(icons[random.nextInt(icons.length)]);
 

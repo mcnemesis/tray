@@ -34,6 +34,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.Random;
 
 class Utility {
@@ -488,6 +490,27 @@ class Utility {
 
     public static double computePercentage(double ratio) {
         return 100 * ratio;
+    }
+
+    public static JSONObject computeMetrics(String text) {
+        JSONObject metrics = new JSONObject();
+        int nLines = text.split("\\n").length;
+        int nChar = text.length();
+        HashSet<Character> characterHashSet = new LinkedHashSet<>();
+        text.toLowerCase().chars().forEach(chr -> characterHashSet.add((char)chr));
+        int nUniqChar = characterHashSet.size();
+
+        try {
+            metrics.put("L", nLines); // number of lines
+            metrics.put("C", nChar); // number of all characters
+            metrics.put("U", nUniqChar); // number of unique characters - case insensitive
+
+            return metrics;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     public class DICT_KEYS {

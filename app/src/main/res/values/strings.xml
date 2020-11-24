@@ -19,4 +19,5 @@
     <string name="label_traydata_from_file">Load TRAY Data from File...</string>
     <string name="error_no_file_manager_found">No suitable File Manager was found.</string>
     <string name="status_pattern">It is %s and \nYou have %s in your %s.</string>
+    <string name="default_label_item_metrics">Metrics</string>
 </resources>

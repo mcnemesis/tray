@@ -34,17 +34,30 @@
             android:layout_marginLeft="15dip"/>
 
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryDark"
-                android:textSize="10dp"
-                android:textStyle="normal"
-                android:fontFamily="monospace"
-                android:text="@string/default_label_item_age"
-                android:id="@+id/txtAge"
-                android:layout_marginTop="5dp"
-                android:layout_marginLeft="20dip"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            android:textSize="10dp"
+            android:textStyle="normal"
+            android:fontFamily="monospace"
+            android:text="@string/default_label_item_age"
+            android:id="@+id/txtAge"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="20dip"/>
+
+        <TextView
+            android:id="@+id/txtMetrics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dip"
+            android:layout_marginTop="5dp"
+            android:fontFamily="monospace"
+            android:text="@string/default_label_item_metrics"
+            android:textColor="@color/colorCellBG2"
+            android:textSize="10dp"
+            android:textStyle="normal" />
 
     </LinearLayout>
 

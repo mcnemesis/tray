@@ -352,7 +352,7 @@ public class MainActivity extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch(item.getItemId()) {
             case R.id.bm_delete: {
-                tray.remove(filtersOn ? filteredToMainTrayIndexMap.get(info.position) : info.position);
+                tray.remove(filtersOn ? (int)filteredToMainTrayIndexMap.get(info.position) : info.position);
                 updateTrayCache();
                 initTrayStream();
                 return true;

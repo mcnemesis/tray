@@ -53,7 +53,7 @@ import androidx.core.content.ContextCompat;
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "TRAY";
-    private static final String DATACACHE_BASEDIR = "TRAYDATA";
+    private static final String DATACACHE_BASEDIR = "METDATA";
     private DBAdapter adapter;
     ArrayList<Cell> tray = new ArrayList<>();
     ArrayList<Cell> filteredTray = new ArrayList<>();

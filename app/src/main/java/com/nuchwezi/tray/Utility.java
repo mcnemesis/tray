@@ -403,7 +403,7 @@ class Utility {
         StringBuilder ageSB = new StringBuilder();
         if(diffYears > 0){
             ageSB.append(String.format("%d Year%s", diffYears, diffYears == 1 ? "" : "s"));
-            diffDays = diffDays - (diffDays % 365);
+            diffDays = (diffDays % 365);
         }
         if(diffDays > 0){
             ageSB.append(String.format(" %d Day%s", diffDays, diffDays == 1 ? "" : "s"));

@@ -575,7 +575,7 @@ public class MainActivity extends AppCompatActivity {
             if(dataPath != null) {
 
                 String SESSION_GUUID = java.util.UUID.randomUUID().toString();
-                String dataCacheFile = String.format("%s/%s-%s.%s", dataPath, Utility.humaneDate(new Date(), true), SESSION_GUUID,
+                String dataCacheFile = String.format("%s/%s-%s.%s", dataPath, Utility.humaneDateStripped(new Date(), true), SESSION_GUUID,
                         "json");
 
                 Writer output = null;

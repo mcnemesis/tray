@@ -284,8 +284,11 @@ class Utility {
             boolean success = false;
 
             if (!folder.exists()) {
-                success = folder.mkdirs();
+                folder.mkdirs();
+                success = folder.exists(); // seems a better approach...
+                if(success)
                 Log.d(Tag, "Created Dir on sdcard...");
+
             } else {
                 success = true;
                 Log.d(Tag, "Dir exists on sdcard...");
@@ -318,6 +321,11 @@ class Utility {
                 return null;
             }
         }
+    }
+
+    public static String humaneDateStripped(Date date,boolean withSeconds) {
+        DateFormat df = new SimpleDateFormat(withSeconds ?"yyyyMMMdd__HH_mm_ss" : "yyyyMMMdd__HH_mm");
+        return df.format(date);
     }
 
     public static String humaneDate(Date date,boolean withSeconds) {

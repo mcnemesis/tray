@@ -10,6 +10,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.ParcelFileDescriptor;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -33,6 +34,8 @@ import com.ipaulpro.afilechooser.utils.FileUtils;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -531,13 +534,16 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        String personaMimeType = getString(R.string.mimeType_tray_datafile);
+        String metaEggMimeType = getString(R.string.mimeType_tray_datafile);
 
         // Create the ACTION_GET_CONTENT Intent
-        Intent getContentIntent = FileUtils.createGetContentIntent();
+        // Intent getContentIntent = FileUtils.createGetContentIntent();
+        // using recommended approach: https://developer.android.com/training/data-storage/shared/documents-files#java
+        Intent getContentIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
 
-        getContentIntent.setType(personaMimeType);
         getContentIntent.addCategory(Intent.CATEGORY_OPENABLE);
+        getContentIntent.setType(metaEggMimeType);
+
 
         Intent chooserIntent = Intent.createChooser(getContentIntent, getString(R.string.label_traydata_from_file));
 
@@ -616,9 +622,20 @@ public class MainActivity extends AppCompatActivity {
 
                 // Get the File path from the Uri
                 // Get the File path from the Uri
-                String selectedPath = FileUtils.getPath(this, uri);
+                //String selectedPath = FileUtils.getPath(this, uri);
 
-                loadImportedTRAYDataFromPath(selectedPath);
+                ParcelFileDescriptor parcelFileDescriptor =
+                        null;
+                try {
+                    parcelFileDescriptor = getContentResolver().openFileDescriptor(uri, "r");
+                    FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+                    loadImportedTRAYDataFromPath(fileDescriptor);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+
+
                 break;
             }
         }
@@ -626,11 +643,12 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, intent);
     }
 
-    private void loadImportedTRAYDataFromPath(String selectedPath) {
+
+    private void loadImportedTRAYDataFromPath(FileDescriptor fileDescriptor) {
         String sCacheRecords_Imported  = null;
         try {
 
-            sCacheRecords_Imported = Utility.readFileToString(selectedPath);
+            sCacheRecords_Imported = Utility.readFileToString(fileDescriptor);
 
             Gson gson = new Gson();
             Type trayType = new TypeToken<ArrayList<Cell>>() {

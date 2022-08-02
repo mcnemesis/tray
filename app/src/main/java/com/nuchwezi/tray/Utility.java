@@ -22,6 +22,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -331,6 +332,25 @@ class Utility {
     public static String humaneDate(Date date,boolean withSeconds) {
         DateFormat df = new SimpleDateFormat(withSeconds ?"MMM dd, yyyy HH:mm:ss" : "MMM dd, yyyy HH:mm");
         return df.format(date);
+    }
+
+
+    public static String readFileToString(FileDescriptor fileDescriptor)  {
+        FileInputStream fin = null;
+        fin = new FileInputStream(fileDescriptor);
+        String ret = null;
+        try {
+            ret = convertStreamToString(fin);
+        } catch (IOException e) {
+            return null;
+        }
+        //Make sure you close all streams.
+        try {
+            fin.close();
+        } catch (IOException e) {
+            return null;
+        }
+        return ret;
     }
 
     public static String readFileToString(String filePath)  {

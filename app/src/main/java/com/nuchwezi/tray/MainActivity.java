@@ -52,6 +52,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -571,7 +572,7 @@ public class MainActivity extends AppCompatActivity {
             String dataPath = null;
 
             try {
-                dataPath = Utility.createSDCardDir(DATACACHE_BASEDIR, getFilesDir());
+                dataPath = Utility.createSDCardDir(this, DATACACHE_BASEDIR, getFilesDir());
             } catch (Exception e) {
                 Log.e(TAG, "DATA Path Error : " + e.getMessage());
                 Utility.showToast(e.getMessage(), getApplicationContext(),
@@ -582,7 +583,7 @@ public class MainActivity extends AppCompatActivity {
 
                 String SESSION_GUUID = java.util.UUID.randomUUID().toString();
                 String dataCacheFile = String.format("%s/%s-%s.%s", dataPath, Utility.humaneDateStripped(new Date(), true), SESSION_GUUID,
-                        "json");
+                        "txt");
 
                 Writer output = null;
                 File file = new File(dataCacheFile);
@@ -603,9 +604,32 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 Utility.showToast(String.format("%s Data Cached at : %s", getString(R.string.app_name), dataCacheFile), this);
+
+                previewOrCopyFileExport(this, file);
             }
 
         }
+    }
+
+    private void previewOrCopyFileExport(Context context, File file) {
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+
+
+        Uri mURI = FileProvider.getUriForFile(
+                context,
+                context.getApplicationContext()
+                        .getPackageName() + ".provider", file);
+        intent.setDataAndType(mURI, "text/plain");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        try {
+            context.startActivity(intent);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override

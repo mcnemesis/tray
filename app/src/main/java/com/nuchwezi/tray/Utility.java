@@ -267,7 +267,7 @@ class Utility {
      * Throws an exception is dirName is null, and returns the name of the
      * created directory if successful
      */
-    public static String createSDCardDir(String dirName, File internalFilesDir) {
+    public static String createSDCardDir(Context context, String dirName, File internalFilesDir) {
 
         Log.d(Tag, "Creating Dir on sdcard...");
 
@@ -276,7 +276,7 @@ class Utility {
             return null;
         }
 
-        File exDir = Environment.getExternalStorageDirectory();
+        File exDir =  new File(context.getExternalFilesDir(null) + "/");//Environment.getExternalStorageDirectory();
 
         if (exDir != null) {
 

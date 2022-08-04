@@ -6,8 +6,8 @@ android {
         applicationId "com.nuchwezi.tray"
         minSdkVersion 24
         targetSdkVersion 32
-        versionCode 26
-        versionName "2.7.5"
+        versionCode 28
+        versionName "2.7.6"
     }
     buildTypes {
         release {

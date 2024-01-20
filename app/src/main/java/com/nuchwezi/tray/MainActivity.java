@@ -581,7 +581,7 @@ public class MainActivity extends AppCompatActivity {
 
             if(dataPath != null) {
 
-                String SESSION_GUUID = java.util.UUID.randomUUID().toString();
+                String SESSION_GUUID = java.util.UUID.randomUUID().toString().substring(0,8);
                 String dataCacheFile = String.format("%s/%s-%s.%s", dataPath, Utility.humaneDateStripped(new Date(), true), SESSION_GUUID,
                         "txt");
 

@@ -122,7 +122,15 @@ public class TrayAdapter extends ArrayAdapter<Cell> {
         JSONObject metrics = Utility.computeMetrics(text);
         try {
             if(metrics != null) {
-                txtMetrics.setText(String.format("L:%s | C: %s | U: %s", metrics.getInt("L"), metrics.getInt("C"), metrics.getInt("U")));
+                txtMetrics.setText(
+                        String.format(
+                                "L:%s | C: %s | U: %s\nW: %s | S: %s",
+                                metrics.getInt("L"),
+                                metrics.getInt("C"),
+                                metrics.getInt("U"),
+                                metrics.getInt("W"),
+                                metrics.getInt("S")
+                        ));
             }
         } catch (JSONException e) {
             e.printStackTrace();

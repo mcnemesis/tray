@@ -12,6 +12,13 @@
         \n\nNote taking, TODO lists, bookmarking important things, collecting research material (using the \"share to TRAY\" for text from other apps), and many other things.
         \n\nSomeone has called TRAY their "living diary", private and secure indeed.
         \n\nNote that there\'s support for Markdown and basic HTML, so you can create well formatted notes if you know some of that stuff too.
+        \n\n------- METRICS -------
+        \n\nNote that Meta-Egg Tray computes and displays some useful metrics for each displayed meta-egg. These metrics are computed as such:
+        \n\nL: number of lines in the raw text (not to be confused with displayed lines based on processing Markdown)
+        \nC: number of characters in the text
+        \nU: number of unique characters -- case sensitive
+        \nW: number of words in the text (ignores all whitespace)
+        \nS: number of unique words -- case sensitive (ignores all whitespace)
     \n\nCOPYRIGHT &amp; LEGAL
     \n\n&#169; Nuchwezi Ltd.
     </string>

@@ -17,10 +17,6 @@
 17<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 18    package="com.ipaulpro.afilechooser" >
 19
-20    <uses-sdk
-21        android:minSdkVersion="7"
-21-->C:\COSMOS\LABS\APPS\MET\tray\aFileChooser\src\main\AndroidManifest.xml
-22        android:targetSdkVersion="32" />
-22-->C:\COSMOS\LABS\APPS\MET\tray\aFileChooser\src\main\AndroidManifest.xml
-23
-24</manifest>
+20    <uses-sdk android:minSdkVersion="7" />
+21
+22</manifest>

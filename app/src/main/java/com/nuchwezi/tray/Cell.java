@@ -11,6 +11,12 @@ class Cell {
         this.moment = moment;
     }
 
+    public String getTimeStampedItem(){ return
+            String.format("%s\r\n#CREATED:%s",
+                    this.item,
+                    Utility.humaneDate(this.moment,true)
+            ); }
+
     public String getItem(){ return  this.item; }
     public Date getMoment() { return  this.moment; }
 

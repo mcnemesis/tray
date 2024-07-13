@@ -373,7 +373,7 @@ public class MainActivity extends AppCompatActivity {
             }
             case R.id.bm_copy: {
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText(getString(R.string.default_label_item), tray.get(filtersOn ? filteredToMainTrayIndexMap.get(info.position) : info.position).getItem());
+                ClipData clip = ClipData.newPlainText(getString(R.string.default_label_item), tray.get(filtersOn ? filteredToMainTrayIndexMap.get(info.position) : info.position).getTimeStampedItem());
                 clipboard.setPrimaryClip(clip);
                 Utility.showToast(String.format("Copied %s to Clipboard", getString(R.string.default_label_item), getString(R.string.app_name)), this);
                 return true;
@@ -406,6 +406,15 @@ public class MainActivity extends AppCompatActivity {
             default:
                 return super.onContextItemSelected(item);
         }
+    }
+
+    private String processMetaEggExport(String item) {
+        /*
+        This method helps to annotate a meta-egg relative to its
+        creation time-stamp, meta-info which is important to
+        keep alongside the meta-egg item contents
+         */
+        return null;
     }
 
 

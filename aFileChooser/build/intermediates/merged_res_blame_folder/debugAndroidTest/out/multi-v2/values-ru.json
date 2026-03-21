@@ -1,0 +1,43 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.ipaulpro.afilechooser.test.aFileChooser-mergeDebugAndroidTestResources-4:/values-ru/values-ru.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\AKAM\\.gradle\\caches\\transforms-3\\c77416b2438df0d04c423dba692b9bcd\\transformed\\core-1.0.0\\res\\values-ru\\values-ru.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "5",
+                        "startColumns": "4",
+                        "startOffsets": "239",
+                        "endColumns": "100",
+                        "endOffsets": "335"
+                    }
+                },
+                {
+                    "source": "E:\\LAB\\APPS\\tray\\aFileChooser\\build\\intermediates\\packaged_res\\debug\\values-ru\\values-ru.xml",
+                    "from": {
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,109,166,239",
+                        "endColumns": "53,56,72,77",
+                        "endOffsets": "104,161,234,312"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,6",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,109,166,340",
+                        "endColumns": "53,56,72,77",
+                        "endOffsets": "104,161,234,413"
+                    }
+                }
+            ]
+        }
+    ]
+}

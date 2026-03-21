@@ -30,7 +30,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
-import com.ipaulpro.afilechooser.utils.FileUtils;
+
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -38,8 +38,10 @@ import java.io.FileDescriptor;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Writer;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -67,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
     private boolean filtersOn; // when in a search, we reference the filtered tray for example
     EditText eTxtSearchFilter;
     private ArrayList<Cell> activeTray = tray; // change this to determine meta-egg subset to render
+    private final int recommendedCriticalEggCount1 = 1000;
+
+    private final int recommendedCriticalEggCount2= 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -303,6 +308,27 @@ public class MainActivity extends AppCompatActivity {
         registerForContextMenu(trayListview);
 
         shownEggCount = activeTray.size();
+
+        updateCriticalStatus();
+
+    }
+
+    private void updateCriticalStatus() {
+        int traySize = getTrayStreamSize();
+        TextView txtStatusCritical = findViewById(R.id.txtStatusCritical);
+        if(traySize >= recommendedCriticalEggCount2){
+            Utility.showToast("Backup Reminder: Potentially above a significant records count. Thus, to prevent accidental data loss, we recommend that you regularly backup your Meta-Eggs via the 'Export' feature, so as to increase resilience in case of an accident.", this);
+            if(shownEggCount == traySize) {
+                txtStatusCritical.setVisibility(View.VISIBLE);
+                txtStatusCritical.setText("Backup Reminder: ensure to regularly back-up. See help for details.");
+            }
+
+        } else if(traySize >= recommendedCriticalEggCount1){
+            Utility.showToast("Backup Reminder: Don't forget to backup/export your records every once in a while!",this, Toast.LENGTH_LONG);
+            txtStatusCritical.setVisibility(View.GONE);
+        }else {
+            txtStatusCritical.setVisibility(View.GONE);
+        }
     }
 
     private ArrayList<Cell> initTrayFromCache() {
@@ -438,6 +464,8 @@ public class MainActivity extends AppCompatActivity {
     private void updateStatus() {
         TextView txtStatus = findViewById(R.id.txtStatus);
         int traySize = getTrayStreamSize();
+
+
         if(shownEggCount == traySize) {
             txtStatus.setText(String.format(this.getString(R.string.status_pattern),
                     Utility.humaneDate(new Date(), true),
@@ -537,12 +565,38 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    private void exportRecordsToFile() {
+        if(adapter.existsDictionaryKey(Utility.DICT_KEYS.TRAY_STORE)) {
+
+            String SESSION_GUUID = java.util.UUID.randomUUID().toString().substring(0, 8);
+            String dataCacheFile = String.format("%s-%s.%s", Utility.humaneDateStripped(new Date(), true), SESSION_GUUID,
+                    "txt");
+
+            Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TITLE, dataCacheFile);
+
+            try {
+                //context.startActivityForResult(intent, REQUEST_CODE);
+                //Context context = this.trayAdapter.getContext();
+                //context.startActivity(intent);
+                this.startActivityForResult(intent, INTENT_MODE.CHOOSE_TRAYDATA_EXPORT_FILE_REQUESTCODE);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
     private void importRecordsFromFile() {
 
+        /*
         if(!getOrRequestReadStoragePermission()){
             Utility.showToast("Please allow the app to read from your storage first.", this);
             return;
-        }
+        }*/
 
         String metaEggMimeType = getString(R.string.mimeType_tray_datafile);
 
@@ -567,7 +621,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void exportRecordsToFile() {
+    private void _old_exportRecordsToFile() {
         if(!getOrRequestWriteStoragePermission()){
             Utility.showToast("Please allow the app to write to your storage first.", this);
             return;
@@ -671,6 +725,29 @@ public class MainActivity extends AppCompatActivity {
 
                 break;
             }
+            case INTENT_MODE.CHOOSE_TRAYDATA_EXPORT_FILE_REQUESTCODE: {
+
+                if(intent == null) {
+                    Utility.showToast("Failed to perform action", this);
+                    break;
+                }
+
+                Uri uri = intent.getData();
+                if(uri != null){
+                    try{
+                        OutputStream outputStream = getContentResolver().openOutputStream(uri);
+                        if(outputStream != null){
+                            String sCacheRecords = adapter.fetchDictionaryEntry(Utility.DICT_KEYS.TRAY_STORE);
+                            outputStream.write(sCacheRecords.getBytes(StandardCharsets.UTF_8));
+                            outputStream.flush();
+                            outputStream.close();
+                        }
+                    }catch(IOException e){
+                        e.printStackTrace();
+                    }
+                }
+
+            }
         }
 
         super.onActivityResult(requestCode, resultCode, intent);
@@ -751,5 +828,6 @@ public class MainActivity extends AppCompatActivity {
 
         public static final int CHOOSE_TRAYDATA_FILE_REQUESTCODE = 3;
 
+        public static final int CHOOSE_TRAYDATA_EXPORT_FILE_REQUESTCODE = 4;
     }
 }

@@ -18,6 +18,5 @@
 18    package="com.ipaulpro.afilechooser" >
 19
 20    <uses-sdk android:minSdkVersion="7" />
-20-->E:\LAB\APPS\tray\aFileChooser\src\main\AndroidManifest.xml
 21
 22</manifest>

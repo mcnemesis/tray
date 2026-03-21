@@ -6,7 +6,7 @@
     <string name="default_label_item">meta egg</string>
     <string name="default_label_item_age">Age</string>
     <string name="action_about">About | Help</string>
-    <string name="powered_by">This technology is brought to you by Nuchwezi ICT Research Labs.
+    <string name="powered_by">This technology is brought to you by Nuchwezi Research.
         \n\nThe basic idea behind TRAY, is to create a tool that allows one to generate, store, share and analyze a stream of time-stamped strings. In the world of TRAY, we call them "meta eggs", and one could think of a meta egg as a self-contained, particular string with a high information density.
         \n\nSO HOW COULD IT HELP YOU?
         \n\nNote taking, TODO lists, bookmarking important things, collecting research material (using the \"share to TRAY\" for text from other apps), and many other things.
@@ -19,8 +19,10 @@
         \nU: number of unique characters -- case sensitive
         \nW: number of words in the text (ignores all whitespace)
         \nS: number of unique words -- case sensitive (ignores all whitespace)
+        \n\n------- OTHER TIPS -------
+         \n\nAs you continue to use Meta-Egg Tray, you\'ll notice that the app does keep track of how many records/eggs you\'ve stored in the app thus far. Experience has shown us that a typical user creating or storing eggs of considerable size might store up to 5000 records before they need to reset and start afresh (otherwise beyond some limit, app might suddently reset itself!). Thus, once we detect that you have hit 1000+ records, we ensure to remind you to back-up or export your meta-eggs to some external storage so as to avoid data loss in case of any storage issues. Otherwise, future versions shall improve on this capacity limit detection and force user to back-up or reset.
     \n\nCOPYRIGHT &amp; LEGAL
-    \n\n&#169; Nuchwezi Ltd.
+    \n\n&#169; Nuchwezi (nuchwezi.com).
     </string>
     <string name="mimeType_tray_datafile">*/*</string>
     <string name="label_traydata_from_file">Load TRAY Data from File...</string>

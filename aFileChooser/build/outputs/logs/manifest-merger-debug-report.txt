@@ -2,10 +2,7 @@
 manifest
 ADDED from E:\LAB\APPS\tray\aFileChooser\src\main\AndroidManifest.xml:17:2-19:13
 INJECTED from E:\LAB\APPS\tray\aFileChooser\src\main\AndroidManifest.xml:17:2-19:13
-INJECTED from E:\LAB\APPS\tray\aFileChooser\src\main\AndroidManifest.xml:17:2-19:13
 	package
-		INJECTED from E:\LAB\APPS\tray\aFileChooser\src\main\AndroidManifest.xml
-		ADDED from E:\LAB\APPS\tray\aFileChooser\src\main\AndroidManifest.xml:17:2-19:13
 		INJECTED from E:\LAB\APPS\tray\aFileChooser\src\main\AndroidManifest.xml
 	xmlns:android
 		ADDED from E:\LAB\APPS\tray\aFileChooser\src\main\AndroidManifest.xml:17:12-70
@@ -13,13 +10,7 @@ uses-sdk
 INJECTED from E:\LAB\APPS\tray\aFileChooser\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from E:\LAB\APPS\tray\aFileChooser\src\main\AndroidManifest.xml
 INJECTED from E:\LAB\APPS\tray\aFileChooser\src\main\AndroidManifest.xml
-INJECTED from E:\LAB\APPS\tray\aFileChooser\src\main\AndroidManifest.xml
-INJECTED from E:\LAB\APPS\tray\aFileChooser\src\main\AndroidManifest.xml
 	android:targetSdkVersion
 		INJECTED from E:\LAB\APPS\tray\aFileChooser\src\main\AndroidManifest.xml
-		ADDED from E:\LAB\APPS\tray\aFileChooser\src\main\AndroidManifest.xml
-		INJECTED from E:\LAB\APPS\tray\aFileChooser\src\main\AndroidManifest.xml
 	android:minSdkVersion
-		INJECTED from E:\LAB\APPS\tray\aFileChooser\src\main\AndroidManifest.xml
-		ADDED from E:\LAB\APPS\tray\aFileChooser\src\main\AndroidManifest.xml
 		INJECTED from E:\LAB\APPS\tray\aFileChooser\src\main\AndroidManifest.xml

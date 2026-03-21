@@ -1,0 +1,8 @@
+com.ipaulpro.afilechooser.test.aFileChooser-coordinatorlayout-1.0.0-0 C:\Users\AKAM\.gradle\caches\transforms-3\71d8c04cc3fcdb8324e4a7fd114bba58\transformed\coordinatorlayout-1.0.0\res
+com.ipaulpro.afilechooser.test.aFileChooser-media-1.0.0-1 C:\Users\AKAM\.gradle\caches\transforms-3\9882cace8b2e42b4db6ffa1276ab6739\transformed\media-1.0.0\res
+com.ipaulpro.afilechooser.test.aFileChooser-core-1.0.0-2 C:\Users\AKAM\.gradle\caches\transforms-3\c77416b2438df0d04c423dba692b9bcd\transformed\core-1.0.0\res
+com.ipaulpro.afilechooser.test.aFileChooser-androidTest-3 E:\LAB\APPS\tray\aFileChooser\build\generated\res\resValues\androidTest\debug
+com.ipaulpro.afilechooser.test.aFileChooser-mergeDebugAndroidTestResources-4 E:\LAB\APPS\tray\aFileChooser\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\merged.dir
+com.ipaulpro.afilechooser.test.aFileChooser-mergeDebugAndroidTestResources-5 E:\LAB\APPS\tray\aFileChooser\build\intermediates\incremental\debugAndroidTest\mergeDebugAndroidTestResources\stripped.dir
+com.ipaulpro.afilechooser.test.aFileChooser-merged_res-6 E:\LAB\APPS\tray\aFileChooser\build\intermediates\merged_res\debugAndroidTest
+com.ipaulpro.afilechooser.test.aFileChooser-packaged_res-7 E:\LAB\APPS\tray\aFileChooser\build\intermediates\packaged_res\debug
